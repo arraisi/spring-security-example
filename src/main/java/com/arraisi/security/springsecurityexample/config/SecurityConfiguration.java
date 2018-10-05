@@ -10,12 +10,13 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
     // CREATE USER
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-//                .passwordEncoder(NoOpPasswordEncoder.getInstance()) <----- KALAU TIDAK MENGGUNAKAN SYNTAX INI BERIKAN "{noop}" DI SEBELAH PASSWORD
-                .withUser("user").password("{noop}password").roles("USER"); // {noop} TIDAK DIREKOMENDASIKAN
+                .passwordEncoder(NoOpPasswordEncoder.getInstance())              // (NEW) KALAU TIDAK MENGGUNAKAN SYNTAX INI BERIKAN "{noop}" DI SEBELAH PASSWORD
+                .withUser("user").password("password").roles("USER");   // .password("{noop}password") *TIDAK DIREKOMENDASIKAN source : https://spring.io/blog/2017/11/01/spring-security-5-0-0-rc1-released#password-encoding
     }
 
     // CONFIGURATION, ROLE, AUTHENTICATION AND AUTHORIZATION
