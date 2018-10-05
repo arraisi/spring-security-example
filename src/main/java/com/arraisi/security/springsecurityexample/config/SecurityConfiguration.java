@@ -5,25 +5,26 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     // CREATE USER
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication()
-//                .withUser("abdul").password("password").and()
-//                .withUser("admin").password("password");
-//    }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+//                .passwordEncoder(NoOpPasswordEncoder.getInstance()) <----- KALAU TIDAK MENGGUNAKAN SYNTAX INI BERIKAN "{noop}" DI SEBELAH PASSWORD
+                .withUser("user").password("{noop}password").roles("USER"); // {noop} TIDAK DIREKOMENDASIKAN
+    }
 
     // CONFIGURATION, ROLE, AUTHENTICATION AND AUTHORIZATION
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.
-                authorizeRequests()
+        httpSecurity
+                .authorizeRequests()
                 .anyRequest()
-                .permitAll()
+                .fullyAuthenticated()
                 .and().httpBasic();
         httpSecurity.csrf().disable();
     }
